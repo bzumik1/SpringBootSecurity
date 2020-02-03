@@ -28,4 +28,15 @@ public class StudentService {
     public Optional<Student> getStudentById(Integer id){
         return studentRepository.findById(id);
     }
+
+    public Optional<Student> deleteStudentById(Integer id){
+        var studentInDb = getStudentById(id);
+        getStudentById(id).ifPresent(student -> studentRepository.delete(student));
+        return studentInDb;
+    }
+
+//    public Optional<Student> updateStudentById(Integer id, Student student){
+//        var studentInDb = getStudentById(id);
+//        studentInDb.ifPresent(studentRepository.sa);
+//    }
 }
