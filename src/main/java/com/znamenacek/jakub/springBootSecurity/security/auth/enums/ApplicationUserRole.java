@@ -1,10 +1,9 @@
-package com.znamenacek.jakub.springBootSecurity.security;
+package com.znamenacek.jakub.springBootSecurity.security.auth.enums;
 
 import com.google.common.collect.Sets;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import static com.znamenacek.jakub.springBootSecurity.security.ApplicationUserPermission.*;
+import static com.znamenacek.jakub.springBootSecurity.security.auth.enums.ApplicationUserPermission.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;

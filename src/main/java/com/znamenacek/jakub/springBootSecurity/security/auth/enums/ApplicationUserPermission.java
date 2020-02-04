@@ -1,4 +1,4 @@
-package com.znamenacek.jakub.springBootSecurity.security;
+package com.znamenacek.jakub.springBootSecurity.security.auth.enums;
 
 public enum ApplicationUserPermission {
     STUDENT_READ("student:read"),
