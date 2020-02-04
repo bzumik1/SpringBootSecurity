@@ -16,7 +16,7 @@ public enum ApplicationUserRole {
 
     private final Set<ApplicationUserPermission> permissions;
 
-    private ApplicationUserRole (Set<ApplicationUserPermission> permissions){ //private constructor because only one object of enum can be created
+    ApplicationUserRole(Set<ApplicationUserPermission> permissions){ //private constructor because only one object of enum can be created
         this.permissions = permissions;
     }
 
