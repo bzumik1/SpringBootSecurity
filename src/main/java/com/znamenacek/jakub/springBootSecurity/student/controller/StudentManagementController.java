@@ -31,6 +31,13 @@ public class StudentManagementController {
         return new ResponseEntity<>(studentService.createStudent(student),HttpStatus.ACCEPTED);
     }
 
+    @PutMapping(path ="/{id}")
+    public ResponseEntity<Student> updateStudentById(@PathVariable Integer id, @RequestBody Student student){
+        return studentService.updateStudentById(id,student)
+                .map(student1 -> new ResponseEntity<>(student1, HttpStatus.OK))
+                .orElseGet(()-> new ResponseEntity<>(null,HttpStatus.NOT_FOUND));
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Student> deleteStudentById(@PathVariable Integer id){
         return studentService.deleteStudentById(id)

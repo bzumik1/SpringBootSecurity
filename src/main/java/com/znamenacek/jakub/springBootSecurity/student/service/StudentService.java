@@ -29,9 +29,19 @@ public class StudentService {
         return studentRepository.findById(id);
     }
 
+    public Optional<Student> updateStudentById(Integer id, Student student){
+        var studentInDb = getStudentById(id);
+        if(studentInDb.isPresent()){
+            student.setId(studentInDb.get().getId());
+            studentRepository.save(student);
+            return Optional.of(student);
+        }
+        return Optional.empty();
+    }
+
     public Optional<Student> deleteStudentById(Integer id){
         var studentInDb = getStudentById(id);
-        getStudentById(id).ifPresent(student -> studentRepository.delete(student));
+        getStudentById(id).ifPresent(studentRepository::delete);
         return studentInDb;
     }
 
