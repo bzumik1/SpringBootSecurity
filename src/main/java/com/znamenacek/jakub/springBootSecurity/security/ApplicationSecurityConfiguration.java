@@ -1,6 +1,9 @@
 package com.znamenacek.jakub.springBootSecurity.security;
 
 import com.znamenacek.jakub.springBootSecurity.security.auth.ApplicationUserService;
+import com.znamenacek.jakub.springBootSecurity.security.jwt.JwtConfiguration;
+import com.znamenacek.jakub.springBootSecurity.security.jwt.JwtTokenVerifierFilter;
+import com.znamenacek.jakub.springBootSecurity.security.jwt.JwtUsernamePasswordAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,26 +13,40 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.crypto.SecretKey;
 
 import static com.znamenacek.jakub.springBootSecurity.security.auth.enums.ApplicationUserRole.*;
 
 @Configuration @EnableWebSecurity @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ApplicationSecurityConfing extends WebSecurityConfigurerAdapter {
+public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserService applicationUserService;
+    private final JwtConfiguration jwtConfiguration;
+    private final SecretKey secretKey;
 
     @Autowired
-    public ApplicationSecurityConfing(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService){
+    public ApplicationSecurityConfiguration(PasswordEncoder passwordEncoder,
+                                            ApplicationUserService applicationUserService,
+                                            JwtConfiguration jwtConfiguration,
+                                            SecretKey secretKey){
         this.passwordEncoder = passwordEncoder;
         this.applicationUserService = applicationUserService;
+        this.jwtConfiguration = jwtConfiguration;
+        this.secretKey = secretKey;
     }
 
     @Override //SETTINGS FOR BASIC AUTHENTICATION
     public void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()// disables csrf (cross side request forgery)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //because of sessions
+                    .and()
+                .addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfiguration, secretKey)) // because of JWT for sending token
+                .addFilterAfter(new JwtTokenVerifierFilter(jwtConfiguration, secretKey), JwtUsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests() //authorize requests
 
                 .antMatchers("/","index","/css/*","/js/*")  //for these no authentication will be necessary
@@ -48,9 +65,9 @@ public class ApplicationSecurityConfing extends WebSecurityConfigurerAdapter {
 //                    .hasAnyRole(ADMIN.name(),ADMINTRAINEE.name())
 
                 .anyRequest() // any request has to be
-                .authenticated() //authenticated
-                .and() // and
-                .httpBasic(); //basic authentication
+                .authenticated(); //authenticated
+//                .and() // and
+//                .httpBasic(); //basic authentication
     }
 
     @Bean

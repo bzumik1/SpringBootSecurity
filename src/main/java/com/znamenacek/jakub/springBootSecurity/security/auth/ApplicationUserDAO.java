@@ -7,5 +7,5 @@ import java.util.Optional;
 
 
 public interface ApplicationUserDAO{
-    public Optional<ApplicationUser> findApplicationUserByUsername(String username);
+    Optional<ApplicationUser> findApplicationUserByUsername(String username);
 }
