@@ -23,8 +23,8 @@ import java.util.Date;
  */
 public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
-    private final JwtConfiguration jwtConfiguration;
-    private final SecretKey secretKey;
+    private final JwtConfiguration jwtConfiguration; //contain JWT settings
+    private final SecretKey secretKey; //secretKey for signing JWT
 
 
     public JwtUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,
@@ -61,6 +61,7 @@ public class JwtUsernamePasswordAuthenticationFilter extends UsernamePasswordAut
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
         String token = Jwts.builder()
+//                .setHeaderParam("typ","JWT") //sets header parameter
                 .setSubject(authResult.getName()) //username
                 .claim("authorities",authResult.getAuthorities())
                 .setIssuedAt(new Date())

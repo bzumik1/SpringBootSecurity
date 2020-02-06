@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 
 @NoArgsConstructor @Getter @Setter
-@Component //could be problem
+//@Component //could be problem
+//@Configuration // for bean
 @ConfigurationProperties(prefix = "application.jwt")
 public class JwtConfiguration {
     private String secretKey;
