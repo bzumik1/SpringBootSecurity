@@ -15,4 +15,10 @@ public class Student {
 
     @Column(length = 100)
     private String name;
+
+    @Column(length = 100)
+    private String surname;
+
+    @Column(length = 200)
+    private String email;
 }

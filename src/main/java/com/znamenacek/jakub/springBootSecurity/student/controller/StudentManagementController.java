@@ -27,6 +27,11 @@ public class StudentManagementController {
         return new ResponseEntity<>(studentService.getAllStudents(), HttpStatus.ACCEPTED);
     }
 
+    @GetMapping(path = "/{id}") @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ADMINTRAINEE')")
+    public ResponseEntity<Student> getStudentById(@PathVariable Integer id){
+        return ResponseEntity.of(studentService.getStudentById(id));
+    }
+
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student){
         return new ResponseEntity<>(studentService.createStudent(student),HttpStatus.ACCEPTED);
